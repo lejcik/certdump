@@ -50,11 +50,6 @@ CPluginInterfaceForViewer::ViewFile(const char *name, int left, int top, int wid
 
 	if (SalamanderGeneral->SalGetTempFileName(NULL, "CVW", szTmpFile, TRUE, NULL))
 	{
-		// create a temporary file which will be used for certificate info storage
-		auto hTmpFile = fopen(szTmpFile, "w");
-		if (!hTmpFile)
-			return FALSE;
-
 		// ask for the password once only per file view
 		bool show_dlg = true;
 		// password handler callback
@@ -71,22 +66,18 @@ CPluginInterfaceForViewer::ViewFile(const char *name, int left, int top, int wid
 		};
 
 		// try out to dump info of the certificate
-		if (!DumpCertificate(name, hTmpFile, pwdHandler))
+		if (!DumpCertificate(name, szTmpFile, pwdHandler))
 		{
-			fclose(hTmpFile);
-
 			// fallback, show raw content if decoding of the certificate file has failed
 			CSalamanderPluginInternalViewerData data{};
 			data.Size = sizeof(data);
-			data.FileName = name;
+			data.FileName = szTmpFile;
 			data.Mode = 0;
 			data.Caption = NULL;
 			data.WholeCaption = FALSE;
 			int err = 0;
 			return SalamanderGeneral->ViewFileInPluginViewer(NULL, &data, FALSE, NULL, "cert_dump.txt", err);
 		}
-
-		fclose(hTmpFile);
 
 		// compose viewer window title
 		char szTitle[2000];

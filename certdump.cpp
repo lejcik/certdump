@@ -692,7 +692,7 @@ bool ParseCertificateFile(BIO *bio_in, BIO *bio_out, PasswordCallback &callback)
 	return false;
 }
 
-bool DumpCertificate(const char *certFile, FILE *out, PasswordCallback callback)
+bool DumpCertificate(const char *certFile, const char *outFile, PasswordCallback callback)
 {
 	bool ret = false;
 	BIO *bio_in = NULL;
@@ -708,7 +708,7 @@ bool DumpCertificate(const char *certFile, FILE *out, PasswordCallback callback)
 		goto cleanup;
 
 	// initialize output stream
-	bio_out = BIO_new_fp(out, BIO_NOCLOSE);
+	bio_out = BIO_new_file(outFile, "w");
 	if (!bio_out)
 		goto cleanup;
 

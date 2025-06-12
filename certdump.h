@@ -13,7 +13,6 @@
 
 #pragma once
 
-#include <stdio.h>
 #include <functional>
 
 // functor prototype for password callback handler,
@@ -25,4 +24,4 @@ using PasswordCallback = std::function<int(char*, int)>;
 
 // dumps the provided certificate file into output FILE, calls password callback only
 // when the file is password protected, returns TRUE on success
-bool DumpCertificate(const char *certFile, FILE *out, PasswordCallback callback);
+bool DumpCertificate(const char *certFile, const char *outFile, PasswordCallback callback);

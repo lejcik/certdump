@@ -22,14 +22,12 @@
 #endif
 
 CertParser::CertParser() :
-	m_tmpname{make_tmpname()},
-	m_file{make_tmpfile()}
+	m_tmpname{make_tmpname()}
 {
 }
 
 CertParser::~CertParser()
 {
-	CloseFile();
 	// erase the temp file
 	unlink(m_tmpname.c_str());
 }
@@ -41,8 +39,7 @@ void CertParser::ParseFile()
 		return;
 	m_parsed = true;
 
-	// close the temp file and read it line by line
-	CloseFile();
+	// read the file line by line
 	std::ifstream infile(m_tmpname.c_str());
 	std::string line;
 	while (std::getline(infile, line))
@@ -71,37 +68,11 @@ std::string CertParser::make_tmpname() const
 	return buffer;
 }
 
-FILE *CertParser::make_tmpfile() const
-{
-	if (m_tmpname.empty())
-		return nullptr;
-
-#ifdef _WIN32
-	// windows with CRT security extensions
-	FILE *f = nullptr;
-	auto err = fopen_s(&f, m_tmpname.c_str(), "w");
-	if (err)
-		std::cerr << "! failed to create temp file, error: " << err << std::endl;
-	return f;
-#else
-	// other posix compatible OS
-	return fopen(m_tmpname.c_str(), "w");
-#endif
-}
-
-void CertParser::CloseFile()
-{
-	if (m_file)
-		fclose(m_file);
-	m_file = nullptr;
-}
-
 //////////////////////////////////////////////////////////////////////////
 
 void TestFixureBase::SetUp()
 {
 	m_parser = std::make_unique<CertParser>();
-	ASSERT_NE(m_parser->GetFilePtr(), nullptr);
 }
 
 void TestFixureBase::TearDown()
@@ -123,7 +94,7 @@ bool TestFixureBase::DumpCertificate(const fs::path &in, CertParser &out, const 
 			return static_cast<int>(password.size());
 		};
 
-	const auto ret = ::DumpCertificate(in.string().c_str(), out.GetFilePtr(), pwdHandler);
+	const auto ret = ::DumpCertificate(in.string().c_str(), out.GetOutputFileName(), pwdHandler);
 	out.ParseFile();
 	return ret;
 }

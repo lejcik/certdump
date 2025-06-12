@@ -27,9 +27,9 @@ public:
 	CertParser();
 	~CertParser();
 
-	FILE *GetFilePtr()
+	const char *GetOutputFileName() const
 	{
-		return m_file;
+		return m_tmpname.c_str();
 	}
 
 	void ParseFile();
@@ -45,14 +45,10 @@ public:
 
 private:
 	std::string make_tmpname() const;
-	FILE *make_tmpfile() const;
-	void CloseFile();
 
 private:
 	// temporary file name
 	std::string m_tmpname;
-	// temporary file handle
-	FILE *m_file{nullptr};
 	// file can be parsed only once
 	bool m_parsed{false};
 	// parsed file content
