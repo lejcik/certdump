@@ -76,7 +76,7 @@ int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb)
 
     b = BUF_MEM_new();
     if (b == NULL) {
-        ERR_raise(ERR_LIB_ASN1, ERR_R_MALLOC_FAILURE);
+        ERR_raise(ERR_LIB_ASN1, ERR_R_BUF_LIB);
         return -1;
     }
 
@@ -87,7 +87,7 @@ int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb)
             want -= diff;
 
             if (len + want < len || !BUF_MEM_grow_clean(b, len + want)) {
-                ERR_raise(ERR_LIB_ASN1, ERR_R_MALLOC_FAILURE);
+                ERR_raise(ERR_LIB_ASN1, ERR_R_BUF_LIB);
                 goto err;
             }
             i = BIO_read(in, &(b->data[len]), want);
@@ -101,6 +101,9 @@ int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb)
                     goto err;
                 }
                 len += i;
+                if ((size_t)i < want)
+                    continue;
+
             }
         }
         /* else data already loaded */
@@ -159,7 +162,7 @@ int asn1_d2i_read_bio(BIO *in, BUF_MEM **pb)
                     size_t chunk = want > chunk_max ? chunk_max : want;
 
                     if (!BUF_MEM_grow_clean(b, len + chunk)) {
-                        ERR_raise(ERR_LIB_ASN1, ERR_R_MALLOC_FAILURE);
+                        ERR_raise(ERR_LIB_ASN1, ERR_R_BUF_LIB);
                         goto err;
                     }
                     want -= chunk;
@@ -593,8 +596,7 @@ int print_attribs(BIO *out, const STACK_OF(X509_ATTRIBUTE) *attrlst,
         }
 
         if (X509_ATTRIBUTE_count(attr)) {
-            for (j = 0; j < X509_ATTRIBUTE_count(attr); j++)
-            {
+            for (j = 0; j < X509_ATTRIBUTE_count(attr); j++) {
                 av = X509_ATTRIBUTE_get0_type(attr, j);
                 print_attribute(out, av);
             }
