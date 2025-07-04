@@ -71,7 +71,7 @@ CPluginInterfaceForViewer::ViewFile(const char *name, int left, int top, int wid
 			// fallback, show raw content if decoding of the certificate file has failed
 			CSalamanderPluginInternalViewerData data{};
 			data.Size = sizeof(data);
-			data.FileName = szTmpFile;
+			data.FileName = name;
 			data.Mode = 0;
 			data.Caption = NULL;
 			data.WholeCaption = FALSE;
