@@ -1,4 +1,0 @@
-LIBRARY CERTVIEW.SPL
-
-EXPORTS SalamanderPluginEntry
-EXPORTS SalamanderPluginGetReqVer

@@ -1,15 +1,5 @@
-//****************************************************************************
-//
-// Copyright (c) ALTAP, spol. s r.o. All rights reserved.
-//
-// This is a part of the Altap Salamander SDK library.
-//
-// The SDK is provided "AS IS" and without warranty of any kind and 
-// ALTAP EXPRESSLY DISCLAIMS ALL WARRANTIES, EXPRESS AND IMPLIED, INCLUDING,
-// BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS
-// FOR A PARTICULAR PURPOSE and NON-INFRINGEMENT.
-//
-//****************************************************************************
+// Copyright (c) 2026 Viliam Lejcik.  Licensed under the MIT License.
+// SPDX-License-Identifier: MIT
 
 #pragma once
 
@@ -62,7 +52,7 @@ class TestFixureBase :
 {
 protected:
 	/// test certs root path
-	const fs::path CERT_ROOT = "certificates";
+	const fs::path CERT_ROOT = TEST_CERT_DIR;
 
 	void SetUp() override;
 	void TearDown() override;

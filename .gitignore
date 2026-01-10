@@ -1,14 +1,10 @@
-# module files
-*.spl
-*.slg
+# Build directories
+build/
+build-*/
+out/
+bin/
+lib/
 
-# MSVC related files
-*.obj
-*.pch
-*.aps
-*.pch
-*.vcxproj.user
-
-# others
-.vs
-.vscode
+# IDE and editor metadata
+.vs/
+.vscode/

@@ -4,35 +4,37 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'cpp' ]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            triplet: x64-linux
+          - os: macos-latest
+            triplet: x64-osx
+          - os: windows-latest
+            triplet: x64-windows
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get install -y libssl-dev libgtest-dev
+    - name: Set up vcpkg
+      uses: johnwason/vcpkg-action@v7
+      with:
+        triplet: ${{ matrix.triplet }}
+        pkgs: openssl gtest
+        token: ${{ github.token }}
 
     - name: Configure the test app
-      run: |
-        cd test
-        mkdir build
-        cd build
-        cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-O0 -g -W -Wextra -Wall -Werror" ..
+      run: cmake . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
 
     - name: Build the test app
-      run: |
-        cd test/build
-        cmake --build .
+      run: cmake --build .
 
     - name: Run the test app
       run: |
-        cd test/build
-        ln -s ../certificates/ certificates
         ctest --verbose
