@@ -8,6 +8,7 @@ add_executable(certdump-test)
 
 target_sources(certdump-test
     PRIVATE
+        certdump-test.cpp
         utils.h
         utils.cpp
         pem-tests.cpp
@@ -18,7 +19,6 @@ target_link_libraries(certdump-test
     PRIVATE
         CertDump::certdump
         GTest::gtest
-        GTest::gtest_main
 )
 
 # define the test certificate directory full path
