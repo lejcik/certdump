@@ -15,6 +15,7 @@ add_subdirectory(src)
 # unit tests
 option(BUILD_TESTING "Build tests" ON)
 if(BUILD_TESTING)
+    enable_testing()
     add_subdirectory(test)
 endif()
 
