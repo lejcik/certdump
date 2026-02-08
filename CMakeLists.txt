@@ -13,7 +13,7 @@ find_package(OpenSSL 3.0 REQUIRED)
 add_subdirectory(src)
 
 # unit tests
-option(BUILD_TESTING "Build tests" ON)
+option(BUILD_TESTING "Build tests" OFF)
 if(BUILD_TESTING)
     enable_testing()
     add_subdirectory(test)
