@@ -15,6 +15,7 @@ target_sources(certdump
 
 target_link_libraries(certdump
     PRIVATE
+        OpenSSL::Crypto
         OpenSSL::SSL
 )
 
