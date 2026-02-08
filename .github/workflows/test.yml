@@ -9,14 +9,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - os: ubuntu-latest
             triplet: x64-linux
           - os: macos-latest
             triplet: arm64-osx
           - os: windows-latest
-            triplet: [ x64-windows, x86-windows ]
+            triplet: x64-windows
+          - os: windows-latest
+            triplet: x86-windows
 
     steps:
     - name: Checkout repository
